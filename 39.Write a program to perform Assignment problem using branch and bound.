@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <limits.h>
+
+#define MAX_SIZE 10 // Maximum size for the cost matrix (adjustable)
+
+// Function to solve the assignment problem using Branch and Bound
+void solveAssignment(int cost[MAX_SIZE][MAX_SIZE], int assigned[MAX_SIZE], bool visited[MAX_SIZE],
+                     int n, int row, int currentCost, int level, int *minCost) {
+    // Base case: All jobs assigned
+    if (level == n) {
+        // Update minCost and assigned array if currentCost is less
+        if (currentCost < *minCost) {
+            *minCost = currentCost;
+            for (int i = 0; i < n; i++) {
+                printf("%d -> %d\n", i, assigned[i]);
+            }
+            printf("Minimum cost: %d\n", *minCost);
+        }
+        return;
+    }
+
+    // Try assigning jobs to each machine (column)
+    for (int col = 0; col < n; col++) {
+        if (cost[row][col] != 0 && !visited[col]) {
+            visited[col] = true;
+            assigned[row] = col;
+            solveAssignment(cost, assigned, visited, n, row + 1, currentCost + cost[row][col], level + 1, minCost);
+            assigned[row] = -1;
+            visited[col] = false;
+        }
+    }
+}
+
+int main() {
+    int n;
+    int cost[MAX_SIZE][MAX_SIZE];
+    int assigned[MAX_SIZE];
+    bool visited[MAX_SIZE] = { false };
+    int minCost = INT_MAX; // Initialize with a large number
+
+    // Input number of jobs (or agents)
+    printf("Enter number of jobs (max %d): ", MAX_SIZE);
+    scanf("%d", &n);
+
+    // Input cost matrix
+    printf("Enter cost matrix (%d x %d):\n", n, n);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &cost[i][j]);
+        }
+    }
+
+    // Initialize assigned array
+    for (int i = 0; i < n; i++) {
+        assigned[i] = -1;
+    }
+
+    // Solve the Assignment Problem using Branch and Bound
+    solveAssignment(cost, assigned, visited, n, 0, 0, 0, &minCost);
+
+    return 0;
+}
+
+OUTPUT:
+Enter number of jobs (max 10): 4
+Enter cost matrix (4 x 4):
+10 2 6 5
+1 15 7 8
+7 6 14 3
+2 8 11 9
+0 -> 2
+1 -> 0
+2 -> 3
+3 -> 1
+Minimum cost: 23
