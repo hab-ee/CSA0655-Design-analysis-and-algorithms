@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Function to compare two integers (for qsort)
+int compare(const void *a, const void *b) {
+    return (*(int *)b - *(int *)a); // Sort in non-increasing order
+}
+
+// Function to solve the container loading problem
+int containerLoading(int weights[], int n, int capacity) {
+    // Sort weights in non-increasing order
+    qsort(weights, n, sizeof(int), compare);
+
+    // Initialize containers and numContainers
+    int containers[n];
+    int numContainers = 0;
+
+    // Loop through each item and place it into a suitable container
+    for (int i = 0; i < n; i++) {
+        int j;
+        for (j = 0; j < numContainers; j++) {
+            if (containers[j] >= weights[i]) {
+                containers[j] -= weights[i];
+                break;
+            }
+        }
+        if (j == numContainers) {
+            containers[numContainers++] = capacity - weights[i];
+        }
+    }
+
+    return numContainers;
+}
+
+int main() {
+    int n, capacity;
+    
+    // Input number of items and capacity of each container
+    printf("Enter the number of items: ");
+    scanf("%d", &n);
+    printf("Enter the capacity of each container: ");
+    scanf("%d", &capacity);
+    
+    // Input weights of the items
+    int weights[n];
+    printf("Enter the weights of the items:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &weights[i]);
+    }
+    
+    // Calculate the minimum number of containers needed
+    int numContainers = containerLoading(weights, n, capacity);
+    
+    // Output the result
+    printf("Minimum number of containers needed: %d\n", numContainers);
+    
+    return 0;
+}
+
+
+
+OUTPUT:
+Enter the number of items: 5
+Enter the capacity of each container: 10
+Enter the weights of the items:
+7 5 3 4 2
+Minimum number of containers needed: 3
