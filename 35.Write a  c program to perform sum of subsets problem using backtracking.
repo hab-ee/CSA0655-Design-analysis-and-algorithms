@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 100
+
+// Function to find subsets that sum up to the target sum using backtracking
+void subsetSum(int set[], int n, int sum, int currentSum, int index, bool subset[]) {
+    if (currentSum == sum) {
+        // Print the subset that sums up to the target sum
+        printf("Subset found: ");
+        for (int i = 0; i < n; i++) {
+            if (subset[i]) {
+                printf("%d ", set[i]);
+            }
+        }
+        printf("\n");
+        return;
+    }
+
+    // Recursive case
+    for (int i = index; i < n; i++) {
+        if (currentSum + set[i] <= sum) {
+            subset[i] = true;  // Include set[i] in the subset
+            subsetSum(set, n, sum, currentSum + set[i], i + 1, subset);
+            subset[i] = false; // Backtrack: Exclude set[i] from the subset
+        }
+    }
+}
+
+int main() {
+    int set[MAX_SIZE];
+    bool subset[MAX_SIZE];
+    int n, sum;
+
+    // Input the size of the set
+    printf("Enter the size of the set: ");
+    scanf("%d", &n);
+
+    // Input elements of the set
+    printf("Enter elements of the set:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &set[i]);
+        subset[i] = false; // Initialize subset array
+    }
+
+    // Input the target sum
+    printf("Enter the target sum: ");
+    scanf("%d", &sum);
+
+    // Find subsets that sum up to the target sum using backtracking
+    subsetSum(set, n, sum, 0, 0, subset);
+
+    return 0;
+}
+
+OUTPUT:
+Enter the size of the set: 5
+Enter elements of the set:
+2 3 7 8 10
+Enter the target sum: 18
+Subset found: 2 8 10 
+
