@@ -1,0 +1,42 @@
+#include <stdio.h>
+
+// Function to find all factors of n using recursion
+void findFactors(int n, int divisor) {
+    // Base case
+    if (divisor > n)
+        return;
+
+    // Check if divisor is a factor of n
+    if (n % divisor == 0) {
+        printf("%d ", divisor); // Print the factor
+    }
+
+    // Recur with the next divisor
+    findFactors(n, divisor + 1);
+}
+
+int main() {
+    int n;
+
+    // Input the number n
+    printf("Enter a positive integer n: ");
+    scanf("%d", &n);
+
+    // Validate input
+    if (n <= 0) {
+        printf("Invalid input. Please enter a positive integer.\n");
+        return 1; // Exit with error code
+    }
+
+    // Print factors of n
+    printf("Factors of %d are: ", n);
+    findFactors(n, 1);
+    printf("\n");
+
+    return 0;
+}
+
+OUTPUT:
+Enter a positive integer n: 30
+Factors of 30 are: 1 2 3 5 6 10 15 30
+
